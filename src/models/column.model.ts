@@ -5,7 +5,7 @@ import { Card } from './card.model';
 export class Column extends BaseModel {
     static tableName = 'columns';
 
-    id!: number;
+    //id!: number;
     title!: string;
     position!: number;
     user_id!: number;
