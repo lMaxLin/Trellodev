@@ -15,6 +15,15 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# Knex migrations
+migrations/*.ts
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
 ### Eclipse ###
 .apt_generated
 .classpath
