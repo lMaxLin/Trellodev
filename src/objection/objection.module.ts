@@ -13,6 +13,6 @@ export class ObjectionModule implements OnModuleInit {
     onModuleInit() {
         const db = knex(knexConfig);
         Model.knex(db);
-        console.log('✅ Objection.js connected to database');
+        console.log('Objection.js connected to database');
     }
 }
