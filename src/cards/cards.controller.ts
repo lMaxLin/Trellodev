@@ -3,24 +3,31 @@ import { CardsService } from './cards.service';
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { createOwnerGuard } from '../common/guards/owner.guard.factory';
 import { Card } from '../models/card.model';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 class CreateCardDto {
+    @ApiProperty({ example: 'Task title' })
     @IsString() title!: string;
+    @ApiPropertyOptional({ example: 'Task description' })
     @IsOptional() @IsString() description?: string;
+    @ApiProperty()
     @IsNumber() column_id!: number;
+    @ApiPropertyOptional()
     @IsOptional() @IsNumber() position?: number;
 }
 
 class UpdateCardDto {
+    @ApiPropertyOptional({ example: 'New title' })
     @IsOptional() @IsString() title!: string;
+    @ApiPropertyOptional({ example: 'New description' })
     @IsOptional() @IsString() description?: string;
+    @ApiPropertyOptional()
     @IsOptional() @IsNumber() position?: number;
 }
 
-
-ApiTags('Cards')
+@ApiTags('Cards')
+@ApiBearerAuth()
 @Controller('cards')
 export class CardsController {
     constructor(private svc: CardsService) {}
@@ -28,6 +35,7 @@ export class CardsController {
     @Post()
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Create Card'})
+    @ApiResponse({ status: 201, description: 'Card created' })
     create(@Body() dto: CreateCardDto, @Req() req: any) {
         return this.svc.create(req.user.userId, dto);
     }
