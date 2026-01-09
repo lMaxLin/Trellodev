@@ -6,7 +6,6 @@ import { Comment } from './comment.model';
 export class User extends BaseModel {
     static tableName = 'users';
 
-    id!: number;
     email!: string;
     password!: string;
     name?: string;
