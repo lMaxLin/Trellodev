@@ -19,7 +19,7 @@ class RegisterDto {
     name?: string
 }
 
-class LogidDto {
+class LoginDto {
 
     @ApiProperty()
     @IsEmail()
@@ -45,7 +45,7 @@ export class AuthController {
     @Post('login')
     @ApiOperation({ summary: 'Login'})
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    login(@Body() dto: LogidDto) {
+    login(@Body() dto: LoginDto) {
         return this.auth.login(dto.email, dto.password);
     }
 }
