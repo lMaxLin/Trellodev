@@ -5,7 +5,6 @@ import { Card } from './card.model';
 export class Comment extends BaseModel {
     static tableName = 'comments';
 
-    id!: number;
     text!: string;
     card_id!: number;
     user_id!: number;
