@@ -6,7 +6,6 @@ import { Comment } from './comment.model';
 export class Card extends BaseModel {
     static tableName = 'cards';
 
-    id!: number;
     title!: string;
     description?: string;
     position!: number;
