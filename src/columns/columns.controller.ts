@@ -3,12 +3,12 @@ import { ColumnService } from './columns.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { createOwnerGuard } from '../common/guards/owner.guard.factory';
 import { Column } from '../models/column.model'
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsOptional, IsNumber } from 'class-validator';
 import { Request } from 'express';
 
 class CreateColumnDto {
-    @ApiProperty()
+    @ApiProperty({ example: 'Column name' })
     @IsString() title!: string;
     @ApiPropertyOptional()
     @IsOptional() @IsNumber() position?: number;
@@ -29,6 +29,7 @@ export class ColumnsController {
     @Post()
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Create column' })
+    @ApiResponse({ status: 201, description: 'Column created' })
     create( @Body() dto: CreateColumnDto, @Req() req: Request & { user: { userId: number } }) {
         return this.svc.create(req.user.userId, dto);
     }

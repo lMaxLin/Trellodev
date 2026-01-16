@@ -3,7 +3,7 @@ import { CommentsService } from './comments.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { createOwnerGuard } from '../common/guards/owner.guard.factory';
 import { Comment } from '../models/comment.model'
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 class CreateCommentDto {
@@ -25,6 +25,7 @@ export class CommentsController {
     @Post()
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Create Comment'})
+    @ApiResponse({ status: 201, description: 'Comment created' })
     create(@Body() dto: CreateCommentDto, @Req() req: any){
         return this.svc.create(req.user.userId, dto)
     }
@@ -34,7 +35,6 @@ export class CommentsController {
     findOne(@Param('id') id: string){
         return this.svc.findOne(Number(id));
     }
-
 
     @Patch(':id')
     @UseGuards(JwtAuthGuard, createOwnerGuard(Comment, 'id','user_id'))
