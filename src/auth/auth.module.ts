@@ -4,20 +4,30 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-        JwtModule.register({
-            secret: process.env.JWT_SECRET || 'secret',
-            signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '3600s' },
+        PassportModule,
+        JwtModule.registerAsync({
+            inject:[ ConfigService ],
+            useFactory: ( config: ConfigService ) => {
+                const secret = config.get<string> ('JWT_SECRET')
+            if (!secret) {
+                throw new Error( 'Jwt is not defined' );
+            }
+            return {
+            secret,
+            signOptions: {
+                expiresIn: config.get<string>('JWT_EXPIRES_IN', '3600s'),
+            },
+            };
+            },
         }),
     ],
     providers: [ AuthService, JwtStrategy ],
     controllers: [ AuthController ],
-    exports: [ AuthService, PassportModule, JwtModule],
+    exports: [ AuthService ],
 })
 
 export class AuthModule {}
