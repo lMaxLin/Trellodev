@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { ColumnsModule } from './columns/columns.module';
 import { CardsModule } from './cards/cards.module';
 import { CommentsModule } from './comments/comments.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { CommentsModule } from './comments/comments.module';
       ColumnsModule,
       CardsModule,
       CommentsModule,
+      ConfigModule.forRoot({
+          isGlobal: true,
+      }),
+      AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
