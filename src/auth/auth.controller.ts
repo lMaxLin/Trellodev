@@ -1,34 +1,9 @@
-import { Controller, Post, Body, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { IsEmail, IsString, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-
-class RegisterDto {
-    @ApiProperty()
-    @IsEmail()
-    email!: string;
-
-    @ApiProperty()
-    @IsString()
-    @MinLength(6)
-    password!: string
-
-    @ApiProperty({ required: false })
-    @IsString()
-    name?: string
-}
-
-class LoginDto {
-
-    @ApiProperty()
-    @IsEmail()
-    email!: string;
-
-    @ApiProperty()
-    @IsString()
-    password!: string;
-}
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
+import { AuthResponseDto } from './dto/auth-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -37,15 +12,13 @@ export class AuthController {
 
     @Post('register')
     @ApiOperation({ summary: 'Register'})
-    @UsePipes(new ValidationPipe({ whitelist: true}))
-    register(@Body() dto: RegisterDto) {
+    register(@Body() dto: RegisterDto): Promise<AuthResponseDto> {
         return this.auth.register(dto);
     }
 
     @Post('login')
     @ApiOperation({ summary: 'Login'})
-    @UsePipes(new ValidationPipe({ whitelist: true }))
-    login(@Body() dto: LoginDto) {
-        return this.auth.login(dto.email, dto.password);
+    login(@Body() dto: LoginDto): Promise<AuthResponseDto> {
+        return this.auth.login(dto);
     }
 }
